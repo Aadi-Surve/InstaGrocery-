@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instamart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            padding: 28px 30px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-bar {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+            border-radius: 12px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 600px;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #27ae60;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 60px 0 30px;
+            font-size: 30px;
+            color: #2c3e50;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            padding: 0 30px 60px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            width: 280px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .product-card p {
+            margin: 6px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .product-card .price {
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .product-card .stock {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 12px;
+            background-color: #f39c12;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #e67e22;
+            transform: scale(1.02);
+        }
+
+        form {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        form button {
+            width: 100%;
+            padding: 14px;
+            background-color: #27ae60;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #219150;
+        }
+
+        footer {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            text-align: center;
+            padding: 24px 0;
+            font-size: 15px;
+            margin-top: 60px;
+        }
+
+        .no-products {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>Instamart</header>
+
+<!-- Search Bar -->
+<div class="search-bar">
+    <input type="text" placeholder="Search InstaGrocery" />
+</div>
+
+<!-- Product Section -->
+<h2 class="section-title">InstaGrocery</h2>
+<div class="product-container">
+    {% for pro in prod %}
+    <div class="product-card">
+        <h3>{{ pro.name }}</h3>
+        <p class="price">₹{{ pro.price }}</p>
+        <p>{{ pro.description }}</p>
+        <p class="stock">Stock: {{ pro.stock }}</p>
+        {% if pro.image %}
+            <img src="{{ pro.image.url }}" alt="{{ pro.name }}">
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
+        <a href="{% url 'edit_product' pro.id %}" class="action-btn">Edit</a>
+        <a href="{% url 'delete_product' pro.id %}" class="action-btn">Delete</a>
+    </div>
+    {% empty %}
+    <p class="no-products">No products available at the moment.</p>
+    {% endfor %}
+</div>
+
+<!-- Add Product -->
+<h2 class="section-title">Add a New Product</h2>
+<form method="POST" action="#" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ fm.as_p }}
+    <button type="submit">Add Product</button>
+</form>
+
+<!-- Footer -->
+<footer>
+    &copy; 2025 InstaGrocery. All rights reserved.
+</footer>
+
+</body>
+</html>
+
